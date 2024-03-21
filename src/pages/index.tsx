@@ -1,9 +1,13 @@
 import Head from "next/head";
 import { TaskCreator } from "@/components/TaskCreator";
 import { TaskList } from "@/components/TaskList";
+import { Container, Stack, useColorMode } from "@chakra-ui/react";
+import { Menu } from "@/components/Menu";
 
 export default function Home() {
-  return (
+    const { colorMode } = useColorMode()
+
+    return (
     <>
       <Head>
         <title>Create Next App</title>
@@ -11,10 +15,26 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <TaskCreator />
-        <TaskList />
-      </main>
+      <Container pt='25%' pb='5%' style={{ background: 'inherit' }}>
+        <Stack spacing='8' style={{ background: 'inherit' }}>
+          <Menu style={{
+            position: 'sticky', top: '0rem', zIndex: '999',
+            background: 'inherit',
+            padding: '0.4rem 0',
+            paddingLeft: '1rem',
+            marginLeft: '-1rem',
+          }} />
+          <TaskCreator style={{
+            position: 'sticky', top: '3.2rem', zIndex: '999',
+            background: colorMode === 'light' ? 'inherit' : 'transparent',
+            paddingLeft: '1rem',
+            marginLeft: '-1rem',
+        }}/>
+          <TaskList />
+        </Stack>
+      </Container>
     </>
   );
 }
+
+export { getServerSideProps } from '@/chakra';

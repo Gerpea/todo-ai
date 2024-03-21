@@ -1,8 +1,9 @@
-import { Card, CardBody, Heading, Spinner, Stack, useToast } from "@chakra-ui/react"
+import { Card, CardBody, Center, Heading, IconButton, Spinner, Stack, Text, useToast } from "@chakra-ui/react"
 import { removeTask } from "@/api"
 import { Task } from "@/types"
 import { useTasks } from "@/hooks/useTasks"
 import { useDelay } from "@/hooks/useDelay"
+import { DeleteIcon } from '@chakra-ui/icons'
 
 type onDeleteHandler = (id: string) => void
 type TaskCardProps = Task & {
@@ -17,14 +18,19 @@ const TaskCard: React.FC<TaskCardProps> = ({ id, name, onDelete }) => {
         <Card
             direction={{ base: 'column', sm: 'row' }}
             overflow='hidden'
-            variant='outline'
         >
             <CardBody>
                 <Heading size='md'>{name}</Heading>
             </CardBody>
-            <button onClick={handleDelete}>
-                Delete task
-            </button>
+            <IconButton
+                aria-label='remove task'
+                colorScheme="red"
+                height='auto'
+                variant='insideCard'
+                borderTopLeftRadius='0'
+                borderBottomLeftRadius='0'
+                icon={<DeleteIcon color="white" />}
+                onClick={handleDelete} />
         </Card>
     )
 }
@@ -48,13 +54,25 @@ export const TaskList = () => {
     }
 
     if (error) {
-        return <div>
-            {error.message}
-        </div>
+        return (
+            <Center>
+                <Text color='red' fontSize={'xl'}>
+                    {'Network Error'}
+                </Text>
+            </Center>
+        )
     }
 
-    return isLoadingDelayed ? <Spinner size='xl' /> : (
-        <Stack spacing={4}>
+    if (isLoadingDelayed) {
+        return (
+            <Center>
+                <Spinner size='xl' />
+            </Center>
+        )
+    }
+
+    return (
+        <Stack spacing={4} pr={'8'}>
             {...tasks.map((task, idx) => (
                 <TaskCard key={task.id || `${task.name}_${idx}`} {...task} onDelete={handleDeleteTask} />
             ))}
