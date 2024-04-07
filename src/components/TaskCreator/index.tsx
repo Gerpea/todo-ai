@@ -3,6 +3,7 @@ import { useTasks } from "@/hooks/useTasks"
 import { AddIcon } from "@chakra-ui/icons"
 import { Card, CardBody, IconButton, Input, InputGroup, useToast } from "@chakra-ui/react"
 import { ChangeEvent, FormEvent, useState } from "react"
+import { motion } from "framer-motion"
 
 export const TaskCreator: React.FC<React.HTMLProps<HTMLFormElement>> = (props) => {
     const toast = useToast()

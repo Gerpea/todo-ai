@@ -14,13 +14,6 @@ export default function App({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </Chakra>
       </SWRConfig>
-      <style jsx global>
-        {`
-          #__next {
-            background: inherit;
-          }
-        `}
-      </style>
     </>
   )
 }

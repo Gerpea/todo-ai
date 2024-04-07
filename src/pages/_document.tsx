@@ -6,7 +6,7 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head />
-      <body>
+      <body style={{overflow: 'hidden'}}>
         <ColorModeScript initialColorMode={theme.config.initialColorMode} type="cookie"/>
         <Main />
         <NextScript />

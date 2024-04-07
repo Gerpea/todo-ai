@@ -1,13 +1,18 @@
 import Head from "next/head";
 import { TaskCreator } from "@/components/TaskCreator";
 import { TaskList } from "@/components/TaskList";
-import { Container, Stack, useColorMode } from "@chakra-ui/react";
+import { Box, Container, Stack, useColorMode } from "@chakra-ui/react";
 import { Menu } from "@/components/Menu";
+import { motion, AnimatePresence, useIsPresent } from "framer-motion"
 
 export default function Home() {
-    const { colorMode } = useColorMode()
+  const { colorMode } = useColorMode()
 
-    return (
+  const animations = {
+    transition: { type: "spring", stiffness: 50, damping: 10 }
+  };
+
+  return (
     <>
       <Head>
         <title>Create Next App</title>
@@ -15,21 +20,12 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Container pt='25%' pb='5%' style={{ background: 'inherit' }}>
-        <Stack spacing='8' style={{ background: 'inherit' }}>
-          <Menu style={{
-            position: 'sticky', top: '0rem', zIndex: '999',
-            background: 'inherit',
-            padding: '0.4rem 0',
-            paddingLeft: '1rem',
-            marginLeft: '-1rem',
-          }} />
-          <TaskCreator style={{
-            position: 'sticky', top: '3.2rem', zIndex: '999',
-            background: colorMode === 'light' ? 'inherit' : 'transparent',
-            paddingLeft: '1rem',
-            marginLeft: '-1rem',
-        }}/>
+      <Container pt='2' pb='4' minW='100%' height='100vh'>
+        <Stack spacing='8' height='100%'>
+          <Stack spacing='8' width='30%' margin='0 auto'>
+            <Menu />
+            <TaskCreator />
+          </Stack>
           <TaskList />
         </Stack>
       </Container>
