@@ -1,13 +1,15 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { Card, CardBody, Center, Heading, IconButton, Spinner, Text, useToast } from "@chakra-ui/react"
 import { removeTask } from "@/api"
-import { Task } from "@/types"
+import { Task, TaskList as TaskListType } from "@/types"
 import { useTasks } from "@/hooks/useTasks"
 import { useDelay } from "@/hooks/useDelay"
+import { useSpeechCommandContext } from "@/contexts/SpeechCommandContext"
 import { DeleteIcon } from '@chakra-ui/icons'
 import ScrollContainer from "react-indiana-drag-scroll"
 import { Responsive, WidthProvider, Layout } from "react-grid-layout";
 import Measure, { ContentRect } from 'react-measure'
+import { levenshteinEditDistance } from 'levenshtein-edit-distance'
 import 'react-grid-layout/css/styles.css';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
@@ -60,6 +62,38 @@ export const TaskList = () => {
         initialValue: false,
     })
 
+    const tasksRef = useRef<TaskListType>([]);
+    const { listen } = useSpeechCommandContext()
+    const onEnd = useRef((value: string) => {
+        let minDstId
+        let minDst
+        for(let i = 0; i < tasksRef.current.length; i++) {
+            const dst = levenshteinEditDistance(value, tasksRef.current[i].name)
+            if(dst === 0) {
+                minDstId = tasksRef.current[i].id
+                break
+            }
+            if(!minDst || dst < minDst) {
+                minDst = dst
+                minDstId = tasksRef.current[i].id
+            }
+        }
+
+        if(minDstId) {
+            handleDeleteTask(minDstId)
+        }
+    })
+    useEffect(() => {
+        const removeEndListener = listen('end', 'delete', onEnd.current)
+
+        return () => {
+            removeEndListener()
+        }
+    }, [])
+    useEffect(() => {
+        tasksRef.current = tasks
+    }, [tasks])
+
     useEffect(() => {
         setMounted(true);
         const layout = localStorage.getItem('rgl')
@@ -67,6 +101,7 @@ export const TaskList = () => {
             setLayout(JSON.parse(layout))
         }
     }, []);
+
 
     const handleDeleteTask = (id: string) => {
         setLayout((layout) => {
