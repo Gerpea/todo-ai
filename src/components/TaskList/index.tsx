@@ -227,3 +227,4 @@ export const TaskList = () => {
     )
 }
 
+TaskList.displayName = "TaskList"

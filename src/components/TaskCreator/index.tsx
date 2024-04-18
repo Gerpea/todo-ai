@@ -1,7 +1,6 @@
 import { createTask } from "@/api"
 import { useSpeechCommandContext } from "@/contexts/SpeechCommandContext"
 import { useTasks } from "@/hooks/useTasks"
-import { CommandEvent } from "@/libs/SpeechCommands"
 import { AddIcon } from "@chakra-ui/icons"
 import { Card, CardBody, IconButton, Input, InputGroup, useToast } from "@chakra-ui/react"
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react"
@@ -74,3 +73,5 @@ export const TaskCreator: React.FC<React.HTMLProps<HTMLFormElement>> = (props) =
         </form>
     )
 }
+
+TaskCreator.displayName = "TaskCreator"
